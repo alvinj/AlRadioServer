@@ -3,14 +3,21 @@ package controllers
 import play.api._
 import play.api.mvc._
 import utils._
+import play.api.libs.json._
+import play.api.libs.json.Json
+import play.api.libs.json.Json._
 
+/**
+ * A "PLS" file is a file that contains one or more URLs for radio streams.
+ * See the wgn.pls or 104_3.pls files in this project for examples of what they contains.
+ * The important thing is that if you give VLC one of those files, it knows how to handle it to open an
+ * online stream to that radio station/service.
+ */
 object Radio extends Controller {
   
-    //
-    // TODO get these from the config file
-    //
-    val host = "localhost"
-    val port = 5150
+    // TODO get these as options (or, leave as is, and let the app crash)
+    val host = play.Play.application.configuration.getString("host")
+    val port = play.Play.application.configuration.getInt("port")
 
     def index = Action {
         Ok(views.html.index("Welcome to AlRadio!"))
@@ -20,38 +27,48 @@ object Radio extends Controller {
      * Given an online stream name like "WGN", play its stream.
      */
     def playStream(streamName: String) = Action {
-        println(s"STREAM NAME: $streamName")
-        // if vlc player is playing, stop it
-        // if radio is playing, stop it
-        // start the vlc server with the given pls file
+        shutdownVlcIfItsRunning(host, port)
+        stopRadioIfItsRunning // TODO
         val canonFilenameOption = getPlsCanonFilenameFromStreamName(streamName)
+        val result = startVlcServerWithPlsFile(canonFilenameOption)
+        result
+    }
+    
+    private def startVlcServerWithPlsFile(canonFilenameOption: Option[String]) = {
         canonFilenameOption match {
             case Some(canonFilename) =>
-                println(s"CAME TO 'SOME'")
-                // TODO send a proper ack to the client
                 startVlcStreamServer(host, port, canonFilename)
-                Ok("ack")
+                Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
             case None => 
-                println(s"CAME TO 'NONE'")
-                // TODO send a proper ack to the client
-                Ok("Error")
+                NotAcceptable(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Something went 'Boom!'"))))
         }
-        
+    }
+    
+    // TODO
+    private def stopRadioIfItsRunning { }
+    
+    private def shutdownVlcIfItsRunning(host: String, port: Int) {
+        // TODO check to see if it's running first
+        try {
+            VlcUtils.shutdown(host, port)
+        } catch {
+            case e: Exception => //
+        }
     }
     
     def pauseVlc = Action {
         VlcUtils.pause(host, port)
-        Ok("")
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     def playVlc = Action {
         VlcUtils.play(host, port)
-        Ok("")
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     def shutdownVlc = Action {
         VlcUtils.shutdown(host, port)
-        Ok("")
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     private def getPlsCanonFilenameFromStreamName(streamName: String): Option[String] = {
