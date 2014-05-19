@@ -18,6 +18,13 @@ object Radio extends Controller {
         Ok(views.html.index("Your new application is ready."))
     }
 
+    def playStream(plsFile: String) = Action {
+        // if vlc player is playing, stop it
+        // if radio is playing, stop it
+        // start the vlc server with the given pls file
+        Ok("Coming soon")
+    }
+
     /**
      * Start a stream, like "wgn.pls" or "104_3.pls".
      */

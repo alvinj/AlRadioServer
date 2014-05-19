@@ -3,22 +3,43 @@ import play.api._
 import scala.collection.JavaConversions._
 
 object Global extends GlobalSettings {
+  
+  var plsFileLocation: Option[String] = None
+  var radioStations: Option[List[Double]] = None
+  var onlineStreams: Option[List[(String, String)]] = None
 
   override def onStart(app: Application) {
-      Logger.info("Application has started")
-      val foo = play.Play.application.configuration.getString("foo")
-      println(s"FOO = $foo (STARTUP)")
-      val fooBar = play.Play.application.configuration.getString("bar.baz")
-      println(s"fooBar = ${fooBar} (STARTUP)")
-
-      // the list of stations (99.5, 102.3, etc.)
-      play.Play.application.configuration.getDoubleList("stations").foreach { station =>
-          println(s"STATION: $station")
+      // populate these values from the application.conf file
+      populatePlsFileLocation
+      populateRadioStations
+      populateListOfStreams
+  }
+  
+  // something like "/var/tmp/plsfiles"
+  private def populatePlsFileLocation {
+      val loc = Some(play.Play.application.configuration.getString("plsFileLocation"))
+      if (loc != null) plsFileLocation = loc
+  }
+  
+  private def populateRadioStations {
+      val stationsList = play.Play.application.configuration.getDoubleList("stations")
+      if (stationsList != null) {
+          val stations = stationsList.map { station => 
+              station.toDouble
+          }.toList
+          radioStations = Some(stations)
       }
-      
-      // the list of streams ("104.3" is "104_3.pls", etc.)
-      play.Play.application.configuration.getConfigList("streams") foreach { stream =>
-          println(s" ${stream.getString("name")} is ${stream.getString("file")}")
+  }
+  
+  private def populateListOfStreams {
+      val streamsList = play.Play.application.configuration.getConfigList("streams")
+      if (streamsList != null) {
+          val streams = streamsList.map { cfg => 
+              val name = cfg.getString("streamname")
+              val filename = cfg.getString("filename")
+              name -> filename
+          }.toList
+          onlineStreams = Some(streams)
       }
   }
 
@@ -27,3 +48,13 @@ object Global extends GlobalSettings {
   }  
     
 }
+
+
+
+
+
+
+
+
+
+
