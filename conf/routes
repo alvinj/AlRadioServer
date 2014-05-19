@@ -11,4 +11,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Radio
 
-GET /playStream                   controllers.Radio.playStream(plsFile: String)
+GET /playStream                   controllers.Radio.playStream(streamName: String)
+GET /pauseVlc                     controllers.Radio.pauseVlc
+GET /playVlc                      controllers.Radio.playVlc
+GET /shutdownVlc                  controllers.Radio.shutdownVlc

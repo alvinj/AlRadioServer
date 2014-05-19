@@ -45,9 +45,10 @@ object VlcUtils {
      * Amount can be "+10", "-10", etc.
      * TODO I think the units value is "seconds".
      */
-    def seek(host: String, port: Int, amount: String) {
-        writeVlcCommandToSocket(host, port, s"seek $amount")
-    }
+    def seek(host: String, port: Int, amount: String) { writeVlcCommandToSocket(host, port, s"seek $amount") }
+    def pause(host: String, port: Int)    { writeVlcCommandToSocket(host, port, "pause") }
+    def play(host: String, port: Int)     { writeVlcCommandToSocket(host, port, "play") }
+    def shutdown(host: String, port: Int) { writeVlcCommandToSocket(host, port, "shutdown") }
 
     /**
      * Sends the given command to the port the VLC server is running on.
@@ -95,9 +96,8 @@ object VlcUtils {
     }
     
     private def runningOnMac = {
-        val mrjVersionExists = System.getProperty("mrj.version") != null
         val osNameExists = System.getProperty("os.name").startsWith("Mac OS")
-        val runningOnMac = if (!mrjVersionExists || !osNameExists) false else true
+        val runningOnMac = if (!osNameExists) false else true
         runningOnMac
     }
 
@@ -120,7 +120,7 @@ object VlcUtils {
         executor.setStreamHandler(streamHandler)
         executor.setWatchdog(watchDog)
         executor.setProcessDestroyer(processDestroyer)
-    
+        
         // exec the command (async)
         executor.execute(cmd, resultHandler)
         
@@ -132,13 +132,13 @@ object VlcUtils {
 //    
 //        val exitValue = resultHandler.getExitValue
 //        println(exitValue)
-//    
+    
 //        if (executor.isFailure(exitValue)) {
-//          System.out.println("Execution failed")
+//            System.out.println("Execution failed")
 //        } else {
-//          System.out.println("Execution Successful")
+//            System.out.println("Execution Successful")
 //        }
 
-    }
+   }
     
 }
