@@ -6,6 +6,7 @@ import utils._
 import play.api.libs.json._
 import play.api.libs.json.Json
 import play.api.libs.json.Json._
+import models.RadioStation
 
 /**
  * A "PLS" file is a file that contains one or more URLs for radio streams.
@@ -25,6 +26,39 @@ object Radio extends Controller {
         Ok(views.html.index("Welcome to AlRadio!"))
     }
 
+    /**
+     * Information Services
+     * --------------------
+     */
+
+    // result: {"88.5":"public radio", "101.1":"ac", "104.3":"sports", "102.3":"espn"}
+    def getRadioStations = Action {
+        val stationsOption = loadListOfRadioStations
+        stationsOption match {
+            case Some(stations) =>
+                // implicit val radioStationFormat = Json.format[RadioStation]
+                Ok(Json.toJson(stations))
+            case None =>
+                Ok(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Could not load the list of radio stations."))))
+        }
+    }
+    
+    // result: ["104.3","WGN"]
+    def getRadioStreams = Action {
+        val streamsOption = getListOfStreams
+        streamsOption match {
+            case Some(streams) =>
+                Ok(Json.toJson(streams.keySet))  // just the stream names
+            case None =>
+                Ok(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Could not load the list of radio streams."))))
+        }
+    }
+    
+    /**
+     * FM Radio Services
+     * -----------------
+     */
+
     // TODO i'm just assuming success here
     def tuneRadio(station: String) = Action {
         shutdownVlcIfItsRunning(vlcHost, vlcPort)
@@ -38,6 +72,12 @@ object Radio extends Controller {
         NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /turn_off\n\n")
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
+    
+
+    /**
+     * VLC-Based Services
+     * ------------------
+     */
     
     /**
      * Given an online stream name like "WGN", play its stream.
@@ -96,7 +136,43 @@ object Radio extends Controller {
             filename <- filenameOption
         } yield s"$dir/$filename"
     }
-    
+
+    /**
+     * TODO if i decide that it's better for `number` to be a BigDecimal, this code
+     * may work (untested).
+     */
+    private def loadListOfRadioStationsAsObjects: Option[List[RadioStation]] = {
+        import scala.collection.JavaConversions._
+        val stationsList = play.Play.application.configuration.getConfigList("stations")
+        if (stationsList != null) {
+            val stations = stationsList.map { cfg =>
+                RadioStation(BigDecimal(cfg.getDouble("number")), cfg.getString("description"))
+            }.toList
+            Some(stations)
+        } else {
+            None
+        }
+    }
+
+    /**
+     * I'm treating the "number" as a String. It may be better to treat it as a
+     * BigDecimal, but that is more work.
+     */
+    private def loadListOfRadioStations: Option[Map[String, String]] = {
+        import scala.collection.JavaConversions._
+        val stationsList = play.Play.application.configuration.getConfigList("stations")
+        if (stationsList != null) {
+            val stations = stationsList.map { cfg => 
+                val number = cfg.getString("number")
+                val description = cfg.getString("description")
+                number -> description
+            }.toMap
+            Some(stations)
+        } else {
+            None
+        }
+    }
+
     private def getListOfStreams: Option[Map[String, String]] = {
         import scala.collection.JavaConversions._
         val streamsList = play.Play.application.configuration.getConfigList("streams")
