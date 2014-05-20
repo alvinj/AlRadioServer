@@ -1,11 +1,8 @@
 package utils
 
 import org.apache.commons.exec.CommandLine
-import java.net.Socket
-import java.io.PrintWriter
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import org.apache.commons.exec._
+import NetworkUtils._
 
 object VlcUtils {
 
@@ -20,49 +17,22 @@ object VlcUtils {
             buildVlcServerCommandRpi(plsFile, host, port)
         }
     }
-    
-    def sendServerShutdownCommand(host: String, port: Int) {
-        writeVlcCommandToSocket(host, port, "shutdown")
-    }
 
-    def increaseVolume(host: String, port: Int) {
-        writeVlcCommandToSocket(host, port, "volup")
-    }
-
-    def increaseVolume(host: String, port: Int, amount: Int) {
-        writeVlcCommandToSocket(host, port, s"volume $amount")
-    }
-
-    def decreaseVolume(host: String, port: Int) {
-        writeVlcCommandToSocket(host, port, "voldown")
-    }
-
-    def decreaseVolume(host: String, port: Int, amount: Int) {
-        writeVlcCommandToSocket(host, port, s"volume $amount")
-    }
+    def sendServerShutdownCommand(host: String, port: Int)   { writeCommandToSocket(host, port, "shutdown") }
+    def increaseVolume(host: String, port: Int)              { writeCommandToSocket(host, port, "volup") }
+    def increaseVolume(host: String, port: Int, amount: Int) { writeCommandToSocket(host, port, s"volume $amount") }
+    def decreaseVolume(host: String, port: Int)              { writeCommandToSocket(host, port, "voldown") }
+    def decreaseVolume(host: String, port: Int, amount: Int) { writeCommandToSocket(host, port, s"volume $amount") }
 
     /**
      * Amount can be "+10", "-10", etc.
      * TODO I think the units value is "seconds".
      */
-    def seek(host: String, port: Int, amount: String) { writeVlcCommandToSocket(host, port, s"seek $amount") }
-    def pause(host: String, port: Int)    { writeVlcCommandToSocket(host, port, "pause") }
-    def play(host: String, port: Int)     { writeVlcCommandToSocket(host, port, "play") }
-    def shutdown(host: String, port: Int) { writeVlcCommandToSocket(host, port, "shutdown") }
+    def seek(host: String, port: Int, amount: String) { writeCommandToSocket(host, port, s"seek $amount") }
+    def pause(host: String, port: Int)    { writeCommandToSocket(host, port, "pause") }
+    def play(host: String, port: Int)     { writeCommandToSocket(host, port, "play") }
+    def shutdown(host: String, port: Int) { writeCommandToSocket(host, port, "shutdown") }
 
-    /**
-     * Sends the given command to the port the VLC server is running on.
-     * Valid commands are "shutdown", "pause", "play", "seek +10", "voldown",
-     * "volup", "volume +10".
-     */
-    private def writeVlcCommandToSocket(host: String, port: Int, command: String) {
-        val socket = new Socket(host, port)
-        val out = new PrintWriter(socket.getOutputStream, true)
-        val in = new BufferedReader(new InputStreamReader(socket.getInputStream))
-        out.println(command)
-        socket.close
-    }
-        
     private def buildVlcServerCommandMac(fileOrStream: String, host: String, port: Int) = {
         val cmd = new CommandLine(getVlcServerCommand)
         cmd.addArgument(fileOrStream)

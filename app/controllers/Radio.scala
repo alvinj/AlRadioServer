@@ -16,18 +16,34 @@ import play.api.libs.json.Json._
 object Radio extends Controller {
   
     // TODO get these as options (or, leave as is, and let the app crash)
-    val host = play.Play.application.configuration.getString("host")
-    val port = play.Play.application.configuration.getInt("port")
+    val vlcHost = play.Play.application.configuration.getString("vlc_host")
+    val vlcPort = play.Play.application.configuration.getInt("vlc_port")
+    val radioServerHost = play.Play.application.configuration.getString("radio_server_host")
+    val radioServerPort = play.Play.application.configuration.getInt("radio_server_port")
 
     def index = Action {
         Ok(views.html.index("Welcome to AlRadio!"))
     }
 
+    // TODO i'm just assuming success here
+    def tuneRadio(station: String) = Action {
+        shutdownVlcIfItsRunning(vlcHost, vlcPort)
+        NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /tune/${station}\n\n")
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
+    
+    // TODO i'm just assuming success here
+    def turnRadioOff = Action {
+        shutdownVlcIfItsRunning(vlcHost, vlcPort)
+        NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /turn_off\n\n")
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
+    
     /**
      * Given an online stream name like "WGN", play its stream.
      */
     def playStream(streamName: String) = Action {
-        shutdownVlcIfItsRunning(host, port)
+        shutdownVlcIfItsRunning(vlcHost, vlcPort)
         stopRadioIfItsRunning // TODO
         val canonFilenameOption = getPlsCanonFilenameFromStreamName(streamName)
         val result = startVlcServerWithPlsFile(canonFilenameOption)
@@ -37,7 +53,7 @@ object Radio extends Controller {
     private def startVlcServerWithPlsFile(canonFilenameOption: Option[String]) = {
         canonFilenameOption match {
             case Some(canonFilename) =>
-                startVlcStreamServer(host, port, canonFilename)
+                startVlcStreamServer(vlcHost, vlcPort, canonFilename)
                 Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
             case None => 
                 NotAcceptable(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Something went 'Boom!'"))))
@@ -57,17 +73,17 @@ object Radio extends Controller {
     }
     
     def pauseVlc = Action {
-        VlcUtils.pause(host, port)
+        VlcUtils.pause(vlcHost, vlcPort)
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     def playVlc = Action {
-        VlcUtils.play(host, port)
+        VlcUtils.play(vlcHost, vlcPort)
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     def shutdownVlc = Action {
-        VlcUtils.shutdown(host, port)
+        VlcUtils.shutdown(vlcHost, vlcPort)
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     

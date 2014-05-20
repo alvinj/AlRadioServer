@@ -9,9 +9,20 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
-# Radio
+# --------------
+# online streams
+# --------------
 
 GET /playStream                   controllers.Radio.playStream(streamName: String)
 GET /pauseVlc                     controllers.Radio.pauseVlc
 GET /playVlc                      controllers.Radio.playVlc
 GET /shutdownVlc                  controllers.Radio.shutdownVlc
+
+
+# --------
+# fm radio
+# --------
+
+GET /tuneRadio                    controllers.Radio.tuneRadio(station: String)
+GET /turnRadioOff                 controllers.Radio.turnRadioOff
+
