@@ -32,7 +32,16 @@ object Radio extends Controller {
      * --------------------
      */
 
-    // result: {"88.5":"public radio", "101.1":"ac", "104.3":"sports", "102.3":"espn"}
+    /**
+     * output:
+     * 
+     * [
+     *     {"number" : "88.5", "description": "public radio"},
+     *     {"number" : "102.3", "description": "espn"},
+     *     {"number" : "104.3", "description": "denver sports"}
+     * ]
+     * 
+     */
     def getRadioStations = Action {
         val stationsOption = loadListOfRadioStationsAsObjects
         stationsOption match {
@@ -44,7 +53,15 @@ object Radio extends Controller {
         }
     }
     
-    // result: ["104.3","WGN"]
+    /**
+     * output:
+     * 
+     * [
+     *     {"name" : "104.3"},
+     *     {"name" : "WGN"}
+     * ]
+     * 
+     */
     def getRadioStreams = Action {
         val streamsOption = loadListOfRadioStreamsForClients
         streamsOption match {
