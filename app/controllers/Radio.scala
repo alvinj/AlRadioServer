@@ -7,6 +7,7 @@ import play.api.libs.json._
 import play.api.libs.json.Json
 import play.api.libs.json.Json._
 import models.RadioStation
+import models.RadioStream
 
 /**
  * A "PLS" file is a file that contains one or more URLs for radio streams.
@@ -33,7 +34,7 @@ object Radio extends Controller {
 
     // result: {"88.5":"public radio", "101.1":"ac", "104.3":"sports", "102.3":"espn"}
     def getRadioStations = Action {
-        val stationsOption = loadListOfRadioStations
+        val stationsOption = loadListOfRadioStationsAsObjects
         stationsOption match {
             case Some(stations) =>
                 // implicit val radioStationFormat = Json.format[RadioStation]
@@ -45,10 +46,10 @@ object Radio extends Controller {
     
     // result: ["104.3","WGN"]
     def getRadioStreams = Action {
-        val streamsOption = getListOfStreams
+        val streamsOption = loadListOfRadioStreamsForClients
         streamsOption match {
             case Some(streams) =>
-                Ok(Json.toJson(streams.keySet))  // just the stream names
+                Ok(Json.toJson(streams))
             case None =>
                 Ok(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Could not load the list of radio streams."))))
         }
@@ -137,6 +138,21 @@ object Radio extends Controller {
         } yield s"$dir/$filename"
     }
 
+    private def getListOfStreams: Option[Map[String, String]] = {
+        import scala.collection.JavaConversions._
+        val streamsList = play.Play.application.configuration.getConfigList("streams")
+        if (streamsList != null) {
+            val streams = streamsList.map { cfg => 
+                val name = cfg.getString("streamname")
+                val filename = cfg.getString("filename")
+                name -> filename
+            }.toMap
+            Some(streams)
+        } else {
+            None
+        }
+    }
+    
     /**
      * TODO if i decide that it's better for `number` to be a BigDecimal, this code
      * may work (untested).
@@ -173,15 +189,15 @@ object Radio extends Controller {
         }
     }
 
-    private def getListOfStreams: Option[Map[String, String]] = {
+    // stream = (streamname, filename)
+    private def loadListOfRadioStreamsForClients: Option[List[RadioStream]] = {
         import scala.collection.JavaConversions._
         val streamsList = play.Play.application.configuration.getConfigList("streams")
         if (streamsList != null) {
-            val streams = streamsList.map { cfg => 
-                val name = cfg.getString("streamname")
-                val filename = cfg.getString("filename")
-                name -> filename
-            }.toMap
+            val streams = streamsList.map { cfg =>
+                // `filename` is ignored by the json `writes` method
+                RadioStream(cfg.getString("streamname"), cfg.getString("filename"))
+            }.toList
             Some(streams)
         } else {
             None
