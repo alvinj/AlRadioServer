@@ -8,6 +8,7 @@ import play.api.libs.json.Json
 import play.api.libs.json.Json._
 import models.RadioStation
 import models.RadioStream
+import java.io.File
 
 /**
  * A "PLS" file is a file that contains one or more URLs for radio streams.
@@ -66,6 +67,33 @@ object Radio extends Controller {
                 Ok(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Could not load the list of radio streams."))))
         }
     }
+
+    /**
+     * Get the recordings we have (stream recordings).
+     */
+    def getRecordings = Action {
+        val recordingsDir = getRecordingsDir
+        val recordings = getListOfRecordings(recordingsDir)
+        // TODO i'm short on time, and just assuming success here
+        Ok(Json.toJson(recordings))
+    }
+    
+    /**
+     * val okFileExtensions = List("wav", "mp3")
+     * val files = getListOfFiles(new File("/tmp"), okFileExtensions)
+     */
+    private def getListOfRecordings(recordingsDir: String): List[String] = {
+        val d = new File(recordingsDir)
+        if (d.exists && d.isDirectory) {
+            d.listFiles.filter(_.isFile).map(_.getName).toList
+        }
+        else {
+            List[String]() 
+        }
+    }
+    
+    private def getRecordingsDir = play.Play.application.configuration.getString("recordings_dir")
+    
     
     /**
      * FM Radio Services
@@ -123,12 +151,21 @@ object Radio extends Controller {
      * ------------------
      */
     
+    def playRecording(recordingFilename: String) = Action {
+        shutdownVlcIfItsRunning(vlcHost, vlcPort)
+        stopRadioIfItsRunning
+        val canonFilename = getRecordingsDir + "/" + recordingFilename
+        startVlcStreamServer(vlcHost, vlcPort, canonFilename)
+        // TODO again, i'm short on time, and just assuming success here
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
+    
     /**
      * Given an online stream name like "WGN", play its stream.
      */
     def playStream(streamName: String) = Action {
         shutdownVlcIfItsRunning(vlcHost, vlcPort)
-        stopRadioIfItsRunning // TODO
+        stopRadioIfItsRunning
         val canonFilenameOption = getPlsCanonFilenameFromStreamName(streamName)
         val result = startVlcServerWithPlsFile(canonFilenameOption)
         result
