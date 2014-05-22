@@ -70,12 +70,13 @@ object Radio extends Controller {
 
     /**
      * Get the recordings we have (stream recordings).
+     * This method returns a JSON array of elements that look like this: {"filename":"Joni_Mitchell-BothSides.mp3"}
      */
     def getRecordings = Action {
         val recordingsDir = getRecordingsDir
         val recordings = getListOfRecordings(recordingsDir)
-        // TODO i'm short on time, and just assuming success here
-        Ok(Json.toJson(recordings))
+        val result = Json.toJson(recordings.map(r => Map("filename" -> r)))
+        Ok(result)
     }
     
     /**
