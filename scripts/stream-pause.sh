@@ -2,6 +2,6 @@
 
 curl \
 --request GET \
-http://localhost:9000/pauseVlc
+http://localhost:9000/server/pauseVlc
 
 

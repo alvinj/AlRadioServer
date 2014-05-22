@@ -13,24 +13,25 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 # online streams
 # --------------
 
-GET /playStream                   controllers.Radio.playStream(streamName: String)
-GET /pauseVlc                     controllers.Radio.pauseVlc
-GET /playVlc                      controllers.Radio.playVlc
-GET /shutdownVlc                  controllers.Radio.shutdownVlc
+GET /server/playStream                   controllers.Radio.playStream(streamName: String)
+GET /server/pauseVlc                     controllers.Radio.pauseVlc
+GET /server/playVlc                      controllers.Radio.playVlc
+GET /server/turnVlcOff                   controllers.Radio.shutdownVlc
 
 
 # --------
 # fm radio
 # --------
 
-GET /tuneRadio                    controllers.Radio.tuneRadio(station: String)
-GET /turnRadioOff                 controllers.Radio.turnRadioOff
+GET /server/tuneRadio                    controllers.Radio.tuneRadio(station: String)
+GET /server/turnRadioOff                 controllers.Radio.turnRadioOff
 
 
-# -----------
-# information
-# -----------
+# ---------------------
+# information/utilities
+# ---------------------
 
-GET /getRadioStations             controllers.Radio.getRadioStations
-GET /getRadioStreams              controllers.Radio.getRadioStreams
+GET /server/getRadioStations             controllers.Radio.getRadioStations
+GET /server/getRadioStreams              controllers.Radio.getRadioStreams
+GET /server/turnEverythingOff            controllers.Radio.turnEverythingOff
 

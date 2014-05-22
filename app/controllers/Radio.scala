@@ -28,11 +28,6 @@ object Radio extends Controller {
     }
 
     /**
-     * Information Services
-     * --------------------
-     */
-
-    /**
      * output:
      * 
      * [
@@ -80,15 +75,33 @@ object Radio extends Controller {
     // TODO i'm just assuming success here
     def tuneRadio(station: String) = Action {
         shutdownVlcIfItsRunning(vlcHost, vlcPort)
-        NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /tune/${station}\n\n")
+        try {
+            NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /tune/${station}\n\n")
+        } catch {
+            case t: Throwable => t.printStackTrace 
+        }
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     // TODO i'm just assuming success here
     def turnRadioOff = Action {
-        shutdownVlcIfItsRunning(vlcHost, vlcPort)
-        NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /turn_off\n\n")
+        // shutdownVlcIfItsRunning(vlcHost, vlcPort)
+        handleTurnRadioOffCommand
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
+
+    def turnEverythingOff = Action {
+        shutdownVlcIfItsRunning(vlcHost, vlcPort)
+        handleTurnRadioOffCommand
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
+
+    private def handleTurnRadioOffCommand {
+        try {
+            NetworkUtils.writeCommandToSocket(radioServerHost, radioServerPort, s"GET /turn_off\n\n")
+        } catch {
+            case t: Throwable => t.printStackTrace 
+        }
     }
     
 
@@ -118,8 +131,10 @@ object Radio extends Controller {
         }
     }
     
-    // TODO
-    private def stopRadioIfItsRunning { }
+    // TODO check to see if the radio is running before trying to shut it down
+    private def stopRadioIfItsRunning { 
+        handleTurnRadioOffCommand
+    }
     
     private def shutdownVlcIfItsRunning(host: String, port: Int) {
         // TODO check to see if it's running first
@@ -140,6 +155,7 @@ object Radio extends Controller {
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
+    // turnVlcOff
     def shutdownVlc = Action {
         VlcUtils.shutdown(vlcHost, vlcPort)
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))

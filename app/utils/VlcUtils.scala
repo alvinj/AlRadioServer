@@ -4,6 +4,10 @@ import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec._
 import NetworkUtils._
 
+/**
+ * Something like this on the RPI:
+ * vlc /var/tmp/PlsFiles/wgn.pls -I rc --rc-host localhost:5150
+ */
 object VlcUtils {
 
     /**

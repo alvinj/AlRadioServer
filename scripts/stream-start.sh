@@ -2,6 +2,6 @@
 
 curl \
 --request GET \
-http://localhost:9000/playStream?streamName=WGN
+http://localhost:9000/server/playStream?streamName=WGN
 
 
