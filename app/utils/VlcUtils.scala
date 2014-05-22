@@ -15,7 +15,7 @@ object VlcUtils {
      * plsFile - like "wgn.pls", "104_3.pls", etc. 
      */
     def buildVlcStreamServerCommand(host: String, port: Int, plsFile: String): CommandLine = {      
-        if (runningOnMac) {
+        if (MacUtils.runningOnMac) {
             buildVlcServerCommandMac(plsFile, host, port)
         } else {
             buildVlcServerCommandRpi(plsFile, host, port)
@@ -62,19 +62,13 @@ object VlcUtils {
     }
     
     private def getVlcServerCommand: String = {      
-        if (runningOnMac) {
+        if (MacUtils.runningOnMac) {
             "/Applications/VLC.app/Contents/MacOS/VLC"
         } else {
             "vlc"
         }
     }
     
-    private def runningOnMac = {
-        val osNameExists = System.getProperty("os.name").startsWith("Mac OS")
-        val runningOnMac = if (!osNameExists) false else true
-        runningOnMac
-    }
-
     def executeCommand(cmd: CommandLine) {
         val watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT)
     

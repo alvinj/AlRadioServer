@@ -34,4 +34,5 @@ GET /server/turnRadioOff                 controllers.Radio.turnRadioOff
 GET /server/getRadioStations             controllers.Radio.getRadioStations
 GET /server/getRadioStreams              controllers.Radio.getRadioStreams
 GET /server/turnEverythingOff            controllers.Radio.turnEverythingOff
+GET /server/setVolume                    controllers.Radio.setVolume(volume: Int)
 

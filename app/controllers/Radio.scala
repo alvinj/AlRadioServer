@@ -103,6 +103,19 @@ object Radio extends Controller {
             case t: Throwable => t.printStackTrace 
         }
     }
+
+    /**
+     * change the volume using the linux `alsa` utilities.
+     */
+    def setVolume(volume: Int) = Action {
+        try {
+            AlsaUtils.setVolume(volume)
+        } catch {
+            case t: Throwable => t.printStackTrace 
+        }
+        // TODO i just assume success here
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
     
 
     /**
