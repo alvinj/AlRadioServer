@@ -74,8 +74,19 @@ object Radio extends Controller {
      */
     def getRecordings = Action {
         val recordingsDir = getRecordingsDir
-        val recordings = getListOfRecordings(recordingsDir)
+        val recordings = getListOfRecordings(recordingsDir, audioFileExtensions)
         val result = Json.toJson(recordings.map(r => Map("filename" -> r)))
+        Ok(result)
+    }
+    
+    /**
+     * List all of the podcasts we have.
+     * This method returns a JSON array of elements that look like this: {"filename":"Joni_Mitchell-BothSides.mp3"}
+     */
+    def getPodcasts = Action {
+        val podcastsDir = getPodcastsDir
+        val podcasts = getListOfRecordings(podcastsDir, audioFileExtensions)
+        val result = Json.toJson(podcasts.map(p => Map("filename" -> p)))
         Ok(result)
     }
     
@@ -83,17 +94,24 @@ object Radio extends Controller {
      * val okFileExtensions = List("wav", "mp3")
      * val files = getListOfFiles(new File("/tmp"), okFileExtensions)
      */
-    private def getListOfRecordings(recordingsDir: String): List[String] = {
+    private def getListOfRecordings(recordingsDir: String, extensions: List[String]): List[String] = {
         val d = new File(recordingsDir)
+        // extensions.exists(file.getName.endsWith(_))
+        // .filter { file =>
         if (d.exists && d.isDirectory) {
-            d.listFiles.filter(_.isFile).map(_.getName).toList
+            val initialList = d.listFiles.filter(_.isFile).map(_.getName).toList
+            initialList.filter { file =>
+                extensions.exists(file.endsWith(_))
+            }
         }
         else {
             List[String]() 
         }
     }
     
+    private def audioFileExtensions = List("aac", "aiff", "m4a", "mp3", "mpg", "mpeg", "ogg", "wav", "wma")
     private def getRecordingsDir = play.Play.application.configuration.getString("recordings_dir")
+    private def getPodcastsDir = play.Play.application.configuration.getString("podcasts_dir")
     
     
     /**
@@ -161,6 +179,15 @@ object Radio extends Controller {
         Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
+    def playPodcast(podcastFilename: String) = Action {
+        shutdownVlcIfItsRunning(vlcHost, vlcPort)
+        stopRadioIfItsRunning
+        val canonFilename = getPodcastsDir + "/" + podcastFilename
+        startVlcStreamServer(vlcHost, vlcPort, canonFilename)
+        // TODO again, i'm short on time, and just assuming success here
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
+    }
+    
     /**
      * Given an online stream name like "WGN", play its stream.
      */
@@ -180,6 +207,16 @@ object Radio extends Controller {
             case None => 
                 NotAcceptable(Json.toJson(Map("success" -> toJson(false), "msg" -> toJson("Something went 'Boom!'"))))
         }
+    }
+
+    /**
+     * Seek forward or backwards.
+     * TODO this method assumes vlc is running; should test that before issuing these commands.
+     */
+    def seek(value: String) = Action {
+        println("SEEK VALUE ==> " + value)
+        VlcUtils.seek(vlcHost, vlcPort, value)
+        Ok(Json.toJson(Map("success" -> toJson(true), "msg" -> toJson("ack"))))
     }
     
     // TODO check to see if the radio is running before trying to shut it down

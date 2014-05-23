@@ -36,12 +36,27 @@ GET /server/getRadioStreams              controllers.Radio.getRadioStreams
 
 GET /server/turnEverythingOff            controllers.Radio.turnEverythingOff
 GET /server/setVolume                    controllers.Radio.setVolume(volume: Int)
+GET /server/seek                         controllers.Radio.seek(value: String)
 
 
 # recordings
 
 GET /server/getRecordings                controllers.Radio.getRecordings
 GET /server/playRecording                controllers.Radio.playRecording(recordingFilename: String)
+
+
+# podcasts
+
+GET /server/getPodcasts                  controllers.Radio.getPodcasts
+GET /server/playPodcast                  controllers.Radio.playPodcast(podcastFilename: String)
+
+
+
+
+
+
+
+
 
 
 
