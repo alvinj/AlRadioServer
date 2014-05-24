@@ -33,6 +33,19 @@ sudo update-rc.d fmradio.sh defaults
 ls -l /etc/rc?.d/*fmradio.sh
 ```
 
+* You should see something like this:
+
+```
+$ ls -l /etc/rc?.d/*fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc0.d/K01fmradio.sh -> ../init.d/fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc1.d/K01fmradio.sh -> ../init.d/fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc2.d/S02fmradio.sh -> ../init.d/fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc3.d/S02fmradio.sh -> ../init.d/fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc4.d/S02fmradio.sh -> ../init.d/fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc5.d/S02fmradio.sh -> ../init.d/fmradio.sh
+lrwxrwxrwx 1 root root 20 May 24 12:43 /etc/rc6.d/K01fmradio.sh -> ../init.d/fmradio.sh
+```
+
 
 Documentation
 -------------
