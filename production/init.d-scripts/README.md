@@ -10,7 +10,7 @@ Installing the scripts
 
 The configuration process to use these scripts is this:
 
-* Copy these scripts to the _/etc/init.d_ directory on the RPI (=sudo cp fmradio.sh /etc/init.d=)
+* Copy these scripts to the _/etc/init.d_ directory on the RPI (`sudo cp fmradio.sh /etc/init.d`)
 * Test the scripts like this:
 
 ```
@@ -19,7 +19,7 @@ sudo /etc/init.d/fmradio.sh status
 sudo /etc/init.d/fmradio.sh stop
 ```
 
-* To be sure, check that the process is running after issuing the `start` command by checking it with `ps` (=ps auxw | grep python= in this case)
+* To be sure, check that the process is running after issuing the `start` command by checking it with `ps` (`ps auxw | grep python` in this case)
 
 * Install the script so it will be run at Linux boot time:
 
