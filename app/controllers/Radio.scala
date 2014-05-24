@@ -72,9 +72,9 @@ object Radio extends Controller {
      * Get the recordings we have (stream recordings).
      * This method returns a JSON array of elements that look like this: {"filename":"Joni_Mitchell-BothSides.mp3"}
      */
-    def getRecordings = Action {
+    def getRecordings(_dc: String) = Action {
         val recordingsDir = getRecordingsDir
-        val recordings = getListOfRecordings(recordingsDir, audioFileExtensions)
+        val recordings = getListOfRecordings(recordingsDir, audioFileExtensions).sorted
         val result = Json.toJson(recordings.map(r => Map("filename" -> r)))
         Ok(result)
     }
@@ -83,9 +83,9 @@ object Radio extends Controller {
      * List all of the podcasts we have.
      * This method returns a JSON array of elements that look like this: {"filename":"Joni_Mitchell-BothSides.mp3"}
      */
-    def getPodcasts = Action {
+    def getPodcasts(_dc: String) = Action {
         val podcastsDir = getPodcastsDir
-        val podcasts = getListOfRecordings(podcastsDir, audioFileExtensions)
+        val podcasts = getListOfRecordings(podcastsDir, audioFileExtensions).sorted
         val result = Json.toJson(podcasts.map(p => Map("filename" -> p)))
         Ok(result)
     }
