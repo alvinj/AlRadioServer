@@ -2,6 +2,6 @@
 
 curl \
 --request GET \
-http://localhost:9000/server/getRadioStreams
+http://localhost:9000/server/getRadioStreams?_dc=0
 
 
