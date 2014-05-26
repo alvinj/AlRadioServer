@@ -43,11 +43,17 @@ The software consists of:
 
 The hardware looks like this:
 
-TODO - photo(s) of the hardware here
+![My Raspberry Pi radio](docs/images/raspberry-pi-radio.jpg "My Raspberry Pi radio")
+
+![My Raspberry Pi radio - Si4703 wiring](docs/images/raspberry-pi-radio-2-si4703.jpg "My Raspberry Pi radio - Si4703 wiring")
 
 The user interface (UI) looks like this:
 
-TODO - screenshot of the UI here
+![My Raspberry Pi radio - UI on the Linux monitor](docs/images/raspberry-pi-radio-ui-linux-monitor.jpg "My Raspberry Pi radio - UI on the Linux monitor")
+
+![My Raspberry Pi radio - UI on the Android tablet](docs/images/raspberry-pi-radio-ui-android-tablet.jpg "My Raspberry Pi radio - UI on the Android tablet")
+
+![My Raspberry Pi radio - UI on my iPad](docs/images/raspberry-pi-radio-ui-ipad.jpg "My Raspberry Pi radio - UI on my iPad")
 
 
 Assumptions
