@@ -65,6 +65,8 @@ Here's a better shot of the UI:
 
 ![My Raspberry Pi web interface (UI)](docs/images/raspberry-pi-radio-web-interface-ui.jpg "My Raspberry Pi web interface (UI)")
 
+The web interface is kept in a separate project known as [AlRadioClient](https://github.com/alvinj/AlRadioClient).
+
 
 Assumptions
 -----------
@@ -239,7 +241,7 @@ The UI
 
 As mentioned, the current UI is a desktop web application written using Sencha ExtJS. This is what it looks like:
 
-TODO - UI screenshot
+![My Raspberry Pi web interface (UI)](docs/images/raspberry-pi-radio-web-interface-ui.jpg "My Raspberry Pi web interface (UI)")
 
 
 Crontab Entries
@@ -336,12 +338,11 @@ As mentioned earlier, streaming audio files are recorded with `Streamripper`. Th
 PLS Files for Online Radio Streams
 ----------------------------------
 
-VLC can read PLS files, and that's how the online audio streams work. I download the PLS files for the stations I want to stream, put them in _/var/www/radio/data/TODO_, and then add them to the Play _rpi.conf_ file.
+VLC can read PLS files, and that's how the online audio streams work. I download the PLS files for the stations I want to stream, put them in _/var/www/radio/data/pls-files_, and then add them to the Play _rpi.conf_ file.
 
 I get the PLS files from these URLs:
 
-* TODO - url here
-* TODO - url here
+* [radio-locator.com](http://radio-locator.com/)
 
 
 Podcasts
