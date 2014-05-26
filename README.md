@@ -1,6 +1,22 @@
 My Raspberry Pi Radio Project
 =============================
 
+Introduction
+------------
+
+This project contains the server-side code for a Raspberry Pi "Radio" system I have created. The system
+lets you do the following things:
+
+* Play local FM radio stations
+* Play online radio streams
+* Record online radio streams so you can listen to them later
+* Play podcasts and other recorded files
+
+You interact with the system using a web interface, which is shown in pictures in this document.
+The web interface can be accessed on the Raspberry Pi monitor (if it has one), a tablet, a phone,
+a PC, or anything else that has a browser. In short, you can control this "radio" from any device
+that has a browser.
+
 Background
 ----------
 
