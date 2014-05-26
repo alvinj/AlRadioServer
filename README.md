@@ -57,6 +57,9 @@ This is what the UI looks like on the Android tablet:
 
 ![My Raspberry Pi radio - UI on the Android tablet](docs/images/raspberry-pi-radio-ui-android-tablet.jpg "My Raspberry Pi radio - UI on the Android tablet")
 
+As you might be able to see from that photo, the web UI is definitely not ideal for the Android tablet. As a result, I'm thinking
+about writing a separate "mobile" client for it.
+
 This is a screenshot of the UI on my iPad:
 
 ![My Raspberry Pi radio - UI on my iPad](docs/images/raspberry-pi-radio-ui-ipad.jpg "My Raspberry Pi radio - UI on my iPad")
