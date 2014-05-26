@@ -41,19 +41,29 @@ The software consists of:
 * Startup scripts that go in _/etc/init.d_
 * Use of Linux utilities, like VLC, Streamripper, and ALSA
 
-The hardware looks like this:
+The hardware is shown in the following images. This first image shows the RPI and the Si4703 chip:
 
 ![My Raspberry Pi radio](docs/images/raspberry-pi-radio.jpg "My Raspberry Pi radio")
 
+This image shows a close-up of the Si4703:
+
 ![My Raspberry Pi radio - Si4703 wiring](docs/images/raspberry-pi-radio-2-si4703.jpg "My Raspberry Pi radio - Si4703 wiring")
 
-The user interface (UI) looks like this:
+This is what the web interface looks like on the RPI (Linux) monitor:
 
 ![My Raspberry Pi radio - UI on the Linux monitor](docs/images/raspberry-pi-radio-ui-linux-monitor.jpg "My Raspberry Pi radio - UI on the Linux monitor")
 
+This is what the UI looks like on the Android tablet:
+
 ![My Raspberry Pi radio - UI on the Android tablet](docs/images/raspberry-pi-radio-ui-android-tablet.jpg "My Raspberry Pi radio - UI on the Android tablet")
 
+This is a screenshot of the UI on my iPad:
+
 ![My Raspberry Pi radio - UI on my iPad](docs/images/raspberry-pi-radio-ui-ipad.jpg "My Raspberry Pi radio - UI on my iPad")
+
+Here's a better shot of the UI:
+
+![My Raspberry Pi web interface (UI)](docs/images/raspberry-pi-radio-web-interface-ui.jpg "My Raspberry Pi web interface (UI)")
 
 
 Assumptions
