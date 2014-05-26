@@ -246,6 +246,8 @@ As mentioned, the current UI is a desktop web application written using Sencha E
 
 ![My Raspberry Pi web interface (UI)](docs/images/raspberry-pi-radio-web-interface-ui.jpg "My Raspberry Pi web interface (UI)")
 
+The code for that project is kept in this Github repo: [AlRadioClient](https://github.com/alvinj/AlRadioClient).
+
 
 Crontab Entries
 ---------------
