@@ -1,6 +1,37 @@
 My Raspberry Pi Radio Project
 =============================
 
+Introduction
+------------
+
+This project contains the server-side code for a Raspberry Pi "Radio" system I have created. The system
+lets you do the following things:
+
+* Play local FM radio stations
+* Play online radio streams
+* Record online radio streams so you can listen to them later
+* Play podcasts and other recorded files
+
+You interact with the system using a web interface, which is shown in pictures in this document.
+The web interface can be accessed on the Raspberry Pi (RPI) monitor (if it has one), a tablet, a phone,
+a PC, or anything else that has a browser. In short, you can control this "radio" from any device
+that has a browser.
+
+The Future
+----------
+
+The system can be expanded in several ways that I can think of today:
+
+* Let you play/control Pandora from the web UI
+* Let you play music, such as your iTunes library
+* Since the RPI is a Linux system, you can also play videos, and in general, do
+  anything else that a Linux system can do
+* If you use the system with an attached monitor, you can do some interesting things
+  with screensavers. It seems weird to write about a "radio" having a screensaver, but
+  once you have a computer monitor in your kitchen you start to think about what you'd like
+  to see on that monitor. For me, I want to see the time, stock prices, Twitter tweets from
+  people I like, news headlines, and all sorts of other things.
+
 Background
 ----------
 
