@@ -1,6 +1,6 @@
 #!/bin/sh
 
-date=`date +"%Y_%a_%b_%d_%H%M%P"`
+date=`date +"%m%d_%a_%H%M%P"`
 
 url=http://4533.live.streamtheworld.com:80/KKFNFMAAC_SC
 output_filename=104_3.${date}

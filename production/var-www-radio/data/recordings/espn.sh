@@ -1,6 +1,6 @@
 #!/bin/sh
 
-date=`date +"%Y_%a_%b_%d_%H%M%P"`
+date=`date +"%m%d_%a_%H%M%P"`
 
 url=http://173.193.205.96:8158
 output_filename=espn.${date}

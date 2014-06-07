@@ -1,0 +1,4 @@
+window_xid: 0x2400017
+window_xid != None:window_xid: 37748759
+window_xid != 0:
+self.window != None:self.window != None:
