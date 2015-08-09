@@ -11,7 +11,7 @@ import sys
 feed_name = sys.argv[1]
 url = sys.argv[2]
 
-db = '/var/www/radio/data/feeds.db'
+db = '/var/www/radio/data/screensaver/feeds.db'
 limit = 12 * 3600 * 1000
 
 #
@@ -38,6 +38,9 @@ def post_is_in_db_with_old_timestamp(title):
                     return True
     return False
 
+def clean_string(string):
+    return string.encode('utf-8').strip()
+
 #
 # get the feed data from the url
 #
@@ -52,7 +55,7 @@ posts_to_skip = []
 for post in feed.entries:
     # if post is already in the database, skip it
     # TODO check the time
-    title = post.title
+    title = clean_string(post.title)
     if post_is_in_db_with_old_timestamp(title):
         posts_to_skip.append(title)
     else:
@@ -64,8 +67,9 @@ for post in feed.entries:
 #
 f = open(db, 'a')
 for title in posts_to_print:
-    if not post_is_in_db(title):
-        f.write(title + "|" + str(current_timestamp) + "\n")
+    title_cleaned = clean_string(title)
+    if not post_is_in_db(title_cleaned):
+        f.write(title_cleaned + "|" + str(current_timestamp) + "\n")
 f.close
     
 #
@@ -78,11 +82,15 @@ for title in posts_to_print:
         print("\n" + '((( ' + feed_name + ' - ' + str(blockcount) + ' )))')
         print("-------------------\n")
         blockcount += 1
-    print(title + "\n")
+    title_cleaned = clean_string(title)
+    print(title_cleaned + "\n")
     count += 1
 
-
-
-
+ipAddr = check_output(["hostname", "-I"])
+print "\n"
+print '---------------------------------'
+print 'IP Address: ' + ipAddr.strip()
+print '---------------------------------'
+print "\n"
 
 
