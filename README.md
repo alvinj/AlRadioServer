@@ -520,14 +520,12 @@ As noted above, the Nginx configuration file needs to be copied to the right loc
 
 ### Newsfeed Configuration
 
-* You need the Python 'feedparser' library:
-
-    # from http://www.pythonforbeginners.com/feedparser/using-feedparser-in-python:
-    # install 'feedparser' with `pip`, after installing pip with apt-get
+* You need the Python 'feedparser' library from http://www.pythonforbeginners.com/feedparser/using-feedparser-in-python:
+* install 'feedparser' with `pip`, after installing pip with apt-get
 
 * Pip install info: https://www.raspberrypi.org/documentation/linux/software/python.md
 
-    # use these commands to install pip and then feedparser
+    // use these commands to install pip and then feedparser
     sudo apt-get install python-pip     # install `pip` for python 2
     sudo pip install feedparser         # use pip to install the feedparser module
 
