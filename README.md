@@ -525,10 +525,11 @@ As noted above, the Nginx configuration file needs to be copied to the right loc
 
 * Pip install info: https://www.raspberrypi.org/documentation/linux/software/python.md
 
-    // use these commands to install pip and then feedparser
-    sudo apt-get install python-pip     # install `pip` for python 2
-    sudo pip install feedparser         # use pip to install the feedparser module
-
+````
+// use these commands to install pip and then feedparser
+sudo apt-get install python-pip     # install `pip` for python 2
+sudo pip install feedparser         # use pip to install the feedparser module
+````
 
 
 
