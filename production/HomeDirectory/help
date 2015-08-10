@@ -1,5 +1,3 @@
-This is the content of my 'help' file on the RPI:
-
 AlRadio Help
 ============
 
@@ -38,5 +36,6 @@ startup scripts
 * links to these scripts are under /etc/rc?.d
 * got the scripts from this url:
   http://blog.scphillips.com/2013/07/getting-a-python-script-to-run-in-the-background-as-a-service-on-boot/
+
 
 

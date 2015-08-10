@@ -380,6 +380,15 @@ I get the PLS files from these URLs:
 
 * [radio-locator.com](http://radio-locator.com/)
 
+Streams work with the `vlc` command, which is run from the Play Server code. The `vlc` command looks
+like this:
+
+    vlc /var/www/radio/data/pls-files/espn-1400.pls --rc-host localhost:5150 -I dummy -I rc
+
+When the system is running and playing a stream, you can continuously display that process with this command:
+
+    while true; do ps auxwwww | grep vlc; sleep 0.5; done
+
 
 Podcasts
 --------
@@ -390,50 +399,50 @@ The only podcasts I've downloaded so far are from an organization known as "Budd
 
 * http://feeds.feedburner.com/BuddhistGeeksPodcast
 
+Update: I got their MP3 files directly from this URL: http://www.buddhistgeeks.org/audio/
+
 
 The Play Framework REST API
 ---------------------------
 
 The Play REST API looks like this:
 
-```
-# --------------
-# online streams
-# --------------
+    # --------------
+    # online streams
+    # --------------
 
-GET /server/playStream                   controllers.Radio.playStream(streamName: String)
-GET /server/pauseVlc                     controllers.Radio.pauseVlc
-GET /server/playVlc                      controllers.Radio.playVlc
-GET /server/turnVlcOff                   controllers.Radio.shutdownVlc
+    GET /server/playStream                   controllers.Radio.playStream(streamName: String)
+    GET /server/pauseVlc                     controllers.Radio.pauseVlc
+    GET /server/playVlc                      controllers.Radio.playVlc
+    GET /server/turnVlcOff                   controllers.Radio.shutdownVlc
 
-# --------
-# fm radio
-# --------
+    # --------
+    # fm radio
+    # --------
 
-GET /server/tuneRadio                    controllers.Radio.tuneRadio(station: String)
-GET /server/turnRadioOff                 controllers.Radio.turnRadioOff
+    GET /server/tuneRadio                    controllers.Radio.tuneRadio(station: String)
+    GET /server/turnRadioOff                 controllers.Radio.turnRadioOff
 
-# ---------------------
-# information/utilities
-# ---------------------
+    # ---------------------
+    # information/utilities
+    # ---------------------
 
-GET /server/getRadioStations             controllers.Radio.getRadioStations
-GET /server/getRadioStreams              controllers.Radio.getRadioStreams
+    GET /server/getRadioStations             controllers.Radio.getRadioStations
+    GET /server/getRadioStreams              controllers.Radio.getRadioStreams
 
-GET /server/turnEverythingOff            controllers.Radio.turnEverythingOff
-GET /server/setVolume                    controllers.Radio.setVolume(volume: Int)
-GET /server/seek                         controllers.Radio.seek(value: String)
+    GET /server/turnEverythingOff            controllers.Radio.turnEverythingOff
+    GET /server/setVolume                    controllers.Radio.setVolume(volume: Int)
+    GET /server/seek                         controllers.Radio.seek(value: String)
 
-# recordings
+    # recordings
 
-GET /server/getRecordings                controllers.Radio.getRecordings(_dc: String)
-GET /server/playRecording                controllers.Radio.playRecording(recordingFilename: String)
+    GET /server/getRecordings                controllers.Radio.getRecordings(_dc: String)
+    GET /server/playRecording                controllers.Radio.playRecording(recordingFilename: String)
 
-# podcasts
+    # podcasts
 
-GET /server/getPodcasts                  controllers.Radio.getPodcasts(_dc: String)
-GET /server/playPodcast                  controllers.Radio.playPodcast(podcastFilename: String)
-```
+    GET /server/getPodcasts                  controllers.Radio.getPodcasts(_dc: String)
+    GET /server/playPodcast                  controllers.Radio.playPodcast(podcastFilename: String)
 
 I'm lazy, so that's a straight copy/paste of the Play _routes_ file.
 
@@ -446,6 +455,8 @@ You can do whatever you want for a screensaver, but I'm currently using "daliclo
 * The time
 * Current stock prices
 * The current weather and/or weather forecast
+
+The ~/.xscreensaver file is very long, so I won't list it here. I'll include a copy of it in this Git repo.
 
 
 Installation/Configuration Steps
@@ -463,7 +474,67 @@ This section is hard to write, I have to do most of it from memory, but here goe
 * Install the startup scripts in _/etc/init.d_. Do the second step needed after that.
 * If you're going to use the monitor after everything is set up, configure a screensaver.
 
-I wish I could have listed all of the `apt-get` commands I've used to install everything, but my history doesn't go back very far.
+
+Linux System Installation
+-------------------------
+
+As mentioned, the Radio Pi system requires plenty of other software.
+
+This is a list of `apt-get` commands that are needed:
+
+    sudo apt-get upgrade
+    sudo apt-get install nginx
+    sudo apt-get install xscreensaver
+    sudo apt-get install xscreensaver-data-extra
+    sudo apt-get install vlc
+    sudo apt-get install streamripper
+    
+    # need this to get python 'feedparser' (for news feeds (ie, with a monitor))
+    sudo apt-get install python3-pip
+    
+    # not needed, already installed
+    sudo apt-get install alsa-utils
+
+### The Play Server Configuration
+
+* TODO: need to get the Play server to start automatically. I have the /etc/init.d/playserver.sh startup
+  script already created, but you need to set the permissions on it once you put it in the /etc/init.d
+  directory:
+
+    http://www.stuffaboutcode.com/2012/06/raspberry-pi-run-program-at-start-up.html
+    http://raspberrypi.stackexchange.com/questions/8734/execute-script-on-start-up (dup of previous link)
+
+### Nginx
+
+As noted above, the Nginx configuration file needs to be copied to the right location
+
+### Screensaver Configuration
+
+* copy the screensaver configuration file to the right location (~/.xscreensaver)
+* useful commands:
+
+    http://alvinalexander.com/source-code/linux-unix/some-linux-xscreensaver-commands
+    http://alvinalexander.com/linux-unix/xdaliclock-xscreensaver-install-rpi-debian-linux
+
+* you need to run those commands from the RPI GUI itself, not from an ssh session
+
+### Newsfeed Configuration
+
+* You need the Python 'feedparser' library:
+
+    # from http://www.pythonforbeginners.com/feedparser/using-feedparser-in-python:
+    # install 'feedparser' with `pip`, after installing pip with apt-get
+
+* Pip install info: https://www.raspberrypi.org/documentation/linux/software/python.md
+
+    # use these commands to install pip and then feedparser
+    sudo apt-get install python-pip     # install `pip` for python 2
+    sudo pip install feedparser         # use pip to install the feedparser module
+
+
+
+
+
 
 
 

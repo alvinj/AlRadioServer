@@ -1,0 +1,9 @@
+alias adios='sudo shutdown -h now'
+alias client='cd /var/www/radio/client'
+alias h='history'
+alias help='cat /home/pi/.help'
+alias l='ls -al'
+alias radio='cd /var/www/radio'
+alias server='cd /var/www/radio/server'
+
+

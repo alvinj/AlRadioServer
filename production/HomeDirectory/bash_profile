@@ -1,0 +1,18 @@
+PS1='
+PI:$PWD
+> '
+
+alias l="ls -al"
+alias h=history
+alias adios="sudo shutdown -h now"
+alias radio="cd /var/www/radio"
+alias server="cd /var/www/radio/server"
+alias client="cd /var/www/radio/client"
+alias help="cat $HOME/.help"
+
+export JAVA_HOME=/opt/java/jdk1.7.0_55
+export PATH=$PATH:$JAVA_HOME/bin
+
+export EDITOR=vi
+
+
