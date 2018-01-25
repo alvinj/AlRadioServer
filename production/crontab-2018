@@ -1,0 +1,32 @@
+#--------------------------------------------------
+# min,hour,dayOfMonth,month,dayOfWeek command
+#
+# field          allowed values
+# -----          --------------
+# minute         0-59
+# hour           0-23
+# day of month   1-31
+# month          1-12 (or names, see below)
+# day of week    0-7 (0 or 7 is Sun, or use names)
+#--------------------------------------------------
+
+# rss feeds
+# ---------
+# 5,20,35,50  * * * * /var/www/radio/scripts/get_feed.py NPR http://www.npr.org/rss/rss.php?id=100 > /var/www/radio/data/screensaver/npr.out 2>&1
+0,15,30,45  * * * * /var/www/radio/scripts/get_feed.py CHICAGO http://www.dailyherald.com/rss/feed/?feed=sports_all > /var/www/radio/data/screensaver/tribune.out 2>&1
+5,20,35,50  * * * * /var/www/radio/scripts/get_feed.py ESPN    http://www.espn.com/espn/rss/news > /var/www/radio/data/screensaver/espn.out 2>&1
+10,25,40,55 * * * * /var/www/radio/scripts/get_feed.py DENVER  http://feeds.denverpost.com/dp-news-topstories > /var/www/radio/data/screensaver/denver.out 2>&1
+
+# rotate feeds
+# ------------
+# 6,21,36,51  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/npr.out
+1,16,31,46  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/tribune.out
+6,21,36,51  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/espn.out
+11,26,41,56  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/denver.out
+
+# stocks
+# ------
+1 7-14 * * 1-5 /var/www/radio/scripts/stocks/GetStocksWrapper.sh > /var/www/radio/data/stocks.out 2>&1
+
+
+

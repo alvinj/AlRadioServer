@@ -38,8 +38,10 @@ def post_is_in_db_with_old_timestamp(title):
                     return True
     return False
 
+# see https://docs.python.org/2/howto/unicode.html
 def clean_string(string):
-    return string.encode('utf-8').strip()
+    return string.encode('ascii', 'ignore').strip()
+    #return string.encode('utf-8').strip()  #old
 
 #
 # get the feed data from the url
