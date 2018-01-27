@@ -13,16 +13,28 @@
 # rss feeds
 # ---------
 # 5,20,35,50  * * * * /var/www/radio/scripts/get_feed.py NPR http://www.npr.org/rss/rss.php?id=100 > /var/www/radio/data/screensaver/npr.out 2>&1
-0,15,30,45  * * * * /var/www/radio/scripts/get_feed.py CHICAGO http://www.dailyherald.com/rss/feed/?feed=sports_all > /var/www/radio/data/screensaver/tribune.out 2>&1
-5,20,35,50  * * * * /var/www/radio/scripts/get_feed.py ESPN    http://www.espn.com/espn/rss/news > /var/www/radio/data/screensaver/espn.out 2>&1
-10,25,40,55 * * * * /var/www/radio/scripts/get_feed.py DENVER  http://feeds.denverpost.com/dp-news-topstories > /var/www/radio/data/screensaver/denver.out 2>&1
+#0,15,30,45  * * * * /var/www/radio/scripts/get_feed.py CHICAGO http://www.dailyherald.com/rss/feed/?feed=sports_all > /var/www/radio/data/screensaver/tribune.out 2>&1
+#5,20,35,50  * * * * /var/www/radio/scripts/get_feed.py ESPN    http://www.espn.com/espn/rss/news > /var/www/radio/data/screensaver/espn.out 2>&1
+#10,25,40,55 * * * * /var/www/radio/scripts/get_feed.py DENVER  http://feeds.denverpost.com/dp-news-topstories > /var/www/radio/data/screensaver/denver.out 2>&1
 
 # rotate feeds
 # ------------
 # 6,21,36,51  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/npr.out
-1,16,31,46  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/tribune.out
-6,21,36,51  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/espn.out
-11,26,41,56  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/denver.out
+#1,16,31,46  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/tribune.out
+#6,21,36,51  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/espn.out
+#11,26,41,56  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/denver.out
+
+# rss feeds
+# ---------
+0,20,40  * * * *  /var/www/radio/scripts/GetFeedWrapper.sh CHICAGO http://www.dailyherald.com/rss/feed/?feed=sports_all > /var/www/radio/data/screensaver/tribune.out 2>&1
+5,25,45  * * * *  /var/www/radio/scripts/GetFeedWrapper.sh ESPN    http://www.espn.com/espn/rss/news > /var/www/radio/data/screensaver/espn.out 2>&1
+10,30,50 * * * *  /var/www/radio/scripts/GetFeedWrapper.sh DENVER  http://feeds.denverpost.com/dp-news-topstories > /var/www/radio/data/screensaver/denver.out 2>&1
+
+# rotate feeds
+# ------------
+1,21,41   * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/tribune.out
+6,26,46   * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/espn.out
+11,31,51  * * * * /var/www/radio/scripts/cp-to-screensaver.sh /var/www/radio/data/screensaver/denver.out
 
 # stocks
 # ------
