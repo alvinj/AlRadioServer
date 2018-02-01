@@ -28,15 +28,22 @@ breakable {
     for (entry <- entries) {
         if (count == 0 || count % 5 == 0) {
             println(s"\n(($feedName - $page))")
-            println("----------------\n")
             page += 1
         }
-        println(entry.getTitle)
+        println(replaceBadCharacters(entry.getTitle))
         println("")
         count += 1
         // print a maximum of 20 headlines
-        if (count > 20) break
+        if (count == 20) break
     }
 }
 
+
+def replaceBadCharacters(string: String): String = {
+    string.replaceAll("“", "\"")
+          .replaceAll("”", "\"")
+          .replaceAll("‘", "\"")
+          .replaceAll("’", "\"")
+          .replaceAll("&amp;", "&")
+}
 
