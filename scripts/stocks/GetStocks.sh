@@ -16,7 +16,6 @@ val stockMap = scala.collection.mutable.LinkedHashMap(
     "CVS"  -> Stock("CVS",   75, 0),
     "F"    -> Stock("F",   10.5, 0),
     "FB"   -> Stock("FB",   179, 0),
-    "GE"   -> Stock("GE",    19, 0),
     "IRBT" -> Stock("IRBT",  70, 0),
     "JCP"  -> Stock("JCP",  3.5, 0),
     "JD"   -> Stock("JD",    46, 0),
@@ -77,5 +76,6 @@ case class Stock(
     priceIBoughtAt: Double,
     var currentPrice: Double
 )
+
 
 
